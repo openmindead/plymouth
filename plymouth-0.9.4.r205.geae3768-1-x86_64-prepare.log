@@ -1,2 +1,0 @@
-patching file scripts/plymouth-update-initrd
-patching file systemd-units/plymouth-quit.service.in

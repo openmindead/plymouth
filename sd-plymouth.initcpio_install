@@ -7,7 +7,7 @@ build() {
 	add_dir /run/plymouth
 
 	DATADIR="/usr/share"
-	PLYMOUTH_LOGO_FILE="${DATADIR}/plymouth/arch-logo.png"
+	PLYMOUTH_LOGO_FILE="${DATADIR}/plymouth/manjaro-logo.png"
 	PLYMOUTH_THEME_NAME="$(/usr/bin/plymouth-set-default-theme)"
 	PLYMOUTH_MODULE_NAME="$(grep "ModuleName *= *" ${DATADIR}/plymouth/themes/${PLYMOUTH_THEME_NAME}/${PLYMOUTH_THEME_NAME}.plymouth | sed 's/ModuleName *= *//')"
 	PLYMOUTH_PLUGIN_PATH="$(plymouth --get-splash-plugin-path)"
