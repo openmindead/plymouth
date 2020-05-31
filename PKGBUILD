@@ -53,8 +53,8 @@ sha256sums=('SKIP'
             '3a46f7faced877a913506d59757f0af60ad3d5f0bc365c56ed7ecc7aef75c5eb'
             'ce3d62f4c5a1b5c0ccadd15406c7430251d1a42b232721bfbfc747da1b13e3ff'
             '2a80e2cad8de428358647677afa166219589d3338c5f94838146c804a29e2769'
-            'c7cb6fc10bc04afc8a661de4de85ebd3974bd8df695ad6043e4c9af5441bab49'
-            '0bb07ff5efa4d7b9afcedeffc35496edb7664c2a0a8030bbdc7b368c5030638d'
+            'f41d3d1d911bb75c80b6c08d3e85d7a69effc6e162e69a395f7bf03637f2256c'
+            '7eeec6934da7f525d6a5e1bdae28ebfbeaaa2a76e3fb4248a8b94ff661fc6466'
             'a1766e3fae000e5158a23b5c01d2c615894e6c3f9923877ccc5ca1bcb36351fa'
             '74908ba59cea53c6a9ab67bb6dec1de1616f3851a0fd89bb3c157a1c54e6633a')
 
