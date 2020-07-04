@@ -4,8 +4,8 @@
 #               Lara Maia, Padfoot, Jorge Barroso, carstene1ns, Sebastian Lau
 
 pkgname=plymouth
-pkgver=0.9.4.r269.g23afdeb
-pkgrel=2
+pkgver=0.9.4.r271.g1e36e30
+pkgrel=1
 pkgdesc="A graphical boot splash screen with kernel mode-setting support"
 url="https://www.freedesktop.org/wiki/Software/Plymouth/"
 arch=('i686' 'x86_64')
