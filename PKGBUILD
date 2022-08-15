@@ -1,3 +1,5 @@
+# Maintainer: Mark Wagie <mark at manjaro dot org>
+
 # Arch credits:
 # Maintainer: Taijian <taijian@posteo.de>
 # Contributor: Sebastian Lau <lauseb644@gmail.com>
@@ -6,7 +8,7 @@
 
 pkgname=plymouth
 pkgver=22.02.122
-pkgrel=4
+pkgrel=5
 pkgdesc="A graphical boot splash screen with kernel mode-setting support"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Software/Plymouth/"
@@ -18,8 +20,6 @@ optdepends=('ttf-dejavu: For true type font support'
             'cantarell-fonts: True Type support for BGRT theme')
 backup=("etc/$pkgname/${pkgname}d.conf")
 options=('!libtool' '!emptydirs')
-#_commit=27764b2a2c2e21ad988cae01dc59d4bb78e5c1dc
-#source=("git+https://gitlab.freedesktop.org/plymouth/plymouth.git#commit=$_commit?signed"
 source=("https://gitlab.freedesktop.org/$pkgname/$pkgname/-/archive/$pkgver/$pkgname-$pkgver.tar.gz"
         'manjaro-logo.png'
         "$pkgname.encrypt_hook"
@@ -34,6 +34,7 @@ source=("https://gitlab.freedesktop.org/$pkgname/$pkgname/-/archive/$pkgver/$pkg
         "$pkgname-quit.service.in.patch"
         "$pkgname-update-initrd.patch"
         "${pkgname}d.conf.patch"
+        '5f1e43c00039a7fe1fff768b91a05a695fb4a53d.patch'
 )
 sha256sums=('8921cd61a9f32f5f8903ceffb9ab0defaef8326253e1549ef85587c19b7f2ab6'
             '014e8a09f88a73b1e5985dcb16a44004e341f5bba90043fa3d7fd7e3a56120cf'
@@ -48,19 +49,17 @@ sha256sums=('8921cd61a9f32f5f8903ceffb9ab0defaef8326253e1549ef85587c19b7f2ab6'
             '05acfbf7f7ba2b8094d3e6dd8f0acc1f8d49f32a7af186f7db9e90d98125840f'
             'dec28b86ddea93704f8479d33e08f81cd7ff4ccaad57e9053c23bd046db2278a'
             '74908ba59cea53c6a9ab67bb6dec1de1616f3851a0fd89bb3c157a1c54e6633a'
-            '71d34351b4313da01e1ceeb082d9776599974ce143c87e93f0a465f342a74fd2')
-#validpgpkeys=('C83E07D34860CD8A3A17D71AEE0AE04989370C36') # Robin Ebert <ebert-robin@web.de>
-
-#pkgver() {
-#  cd "$srcdir/$pkgname"
-#  git describe --tags | sed 's/-/+/g'
-#}
+            '71d34351b4313da01e1ceeb082d9776599974ce143c87e93f0a465f342a74fd2'
+            'e6d15ebf6225201be61c0127a239abc47e903312a665727c88856c543daff066')
 
 prepare() {
   cd "$srcdir/$pkgname-$pkgver"
   patch -p1 -i "$srcdir/$pkgname-update-initrd.patch"
   patch -p1 -i "$srcdir/$pkgname-quit.service.in.patch"
   patch -p1 -i "$srcdir/${pkgname}d.conf.patch"
+
+  # ply-utils: Drop linux/fs.h include
+  patch -p1 -i "$srcdir/5f1e43c00039a7fe1fff768b91a05a695fb4a53d.patch"
 }
 
 build() {
