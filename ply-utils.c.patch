@@ -1,3 +1,4 @@
+@@ -0,0 +1,30 @@
 From 5f1e43c00039a7fe1fff768b91a05a695fb4a53d Mon Sep 17 00:00:00 2001
 From: Ray Strode <rstrode@redhat.com>
 Date: Wed, 3 Aug 2022 15:23:33 -0400
@@ -25,4 +26,3 @@ index c7b165e9..219e2e77 100644
  #include <linux/vt.h>
  
  #include <dlfcn.h>
-

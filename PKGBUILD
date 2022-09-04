@@ -8,19 +8,19 @@
 
 pkgname=plymouth
 pkgver=22.02.122
-pkgrel=5
+pkgrel=6
 pkgdesc="A graphical boot splash screen with kernel mode-setting support"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Software/Plymouth/"
 license=('GPL')
 depends=('libdrm' 'pango' 'systemd')
-makedepends=('docbook-xsl')
-optdepends=('ttf-dejavu: For true type font support'
-            'xf86-video-fbdev: Support special graphic cards on early startup'
-            'cantarell-fonts: True Type support for BGRT theme')
+makedepends=('docbook-xsl' 'git')
+optdepends=('cantarell-fonts: For true type font support'
+            'xf86-video-fbdev: Support special graphic cards on early startup')
 backup=("etc/$pkgname/${pkgname}d.conf")
-options=('!libtool' '!emptydirs')
-source=("https://gitlab.freedesktop.org/$pkgname/$pkgname/-/archive/$pkgver/$pkgname-$pkgver.tar.gz"
+#options=('!libtool' '!emptydirs')
+_commit=27764b2a2c2e21ad988cae01dc59d4bb78e5c1dc
+source=("git+https://gitlab.freedesktop.org/plymouth/plymouth.git#commit=${_commit}"
         'manjaro-logo.png'
         "$pkgname.encrypt_hook"
         "$pkgname.encrypt_install"
@@ -34,9 +34,10 @@ source=("https://gitlab.freedesktop.org/$pkgname/$pkgname/-/archive/$pkgver/$pkg
         "$pkgname-quit.service.in.patch"
         "$pkgname-update-initrd.patch"
         "${pkgname}d.conf.patch"
-        '5f1e43c00039a7fe1fff768b91a05a695fb4a53d.patch'
+        'ply-utils.c.patch'
+        'runstatedir.patch'
 )
-sha256sums=('8921cd61a9f32f5f8903ceffb9ab0defaef8326253e1549ef85587c19b7f2ab6'
+sha256sums=('SKIP'
             '014e8a09f88a73b1e5985dcb16a44004e341f5bba90043fa3d7fd7e3a56120cf'
             '748e0cfa0e10ab781bc202fceeed46e765ed788784f1b85945187b0f29eafad7'
             '373ec20fe4c47e693a0c45cc06dd906e35dd1d70a85546bd1d571391de11763a'
@@ -50,20 +51,27 @@ sha256sums=('8921cd61a9f32f5f8903ceffb9ab0defaef8326253e1549ef85587c19b7f2ab6'
             'dec28b86ddea93704f8479d33e08f81cd7ff4ccaad57e9053c23bd046db2278a'
             '74908ba59cea53c6a9ab67bb6dec1de1616f3851a0fd89bb3c157a1c54e6633a'
             '71d34351b4313da01e1ceeb082d9776599974ce143c87e93f0a465f342a74fd2'
-            'e6d15ebf6225201be61c0127a239abc47e903312a665727c88856c543daff066')
+            '1bd7693d1e135fe9e22a03f7635309e2ae616e952665d9774eb5ca4d82718e1b'
+            '7c0224737119f949b8d5ca24c438f253b5734e3391a47e8f5f1dda28b8c4ab92')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --tags | sed 's/-/+/g'
+}
 
 prepare() {
-  cd "$srcdir/$pkgname-$pkgver"
+  cd "$srcdir/$pkgname"
   patch -p1 -i "$srcdir/$pkgname-update-initrd.patch"
   patch -p1 -i "$srcdir/$pkgname-quit.service.in.patch"
   patch -p1 -i "$srcdir/${pkgname}d.conf.patch"
 
-  # ply-utils: Drop linux/fs.h include
-  patch -p1 -i "$srcdir/5f1e43c00039a7fe1fff768b91a05a695fb4a53d.patch"
+  # apply upstream patches
+  patch -p1 -i $srcdir/ply-utils.c.patch
+  patch -p1 -i $srcdir/runstatedir.patch
 }
 
 build() {
-  cd "$srcdir/$pkgname-$pkgver"
+  cd "$srcdir/$pkgname"
 
   LDFLAGS="$LDFLAGS -ludev" ./autogen.sh \
     --prefix=/usr \
@@ -85,18 +93,16 @@ build() {
     --with-background-end-color-stop=0x4D4D4D \
     --without-rhgb-compat-link \
     --without-system-root-install \
-    --with-runtimedir=/run
+    --runstatedir=/run
 
   make
 }
 
 package() {
-  cd "$srcdir/$pkgname-$pkgver"
-
+  cd "$srcdir/$pkgname"
   make DESTDIR="$pkgdir" install
 
   install -Dm644 "$srcdir/manjaro-logo.png" "$pkgdir/usr/share/$pkgname/manjaro-logo.png"
-
   install -Dm644 "$srcdir/$pkgname.encrypt_hook" "$pkgdir/usr/lib/initcpio/hooks/$pkgname-encrypt"
   install -Dm644 "$srcdir/$pkgname.encrypt_install" "$pkgdir/usr/lib/initcpio/install/$pkgname-encrypt"
   install -Dm644 "$srcdir/$pkgname.initcpio_hook" "$pkgdir/usr/lib/initcpio/hooks/$pkgname"
@@ -109,4 +115,7 @@ package() {
 
   install -Dm644 "$srcdir/$pkgname-deactivate.service" "$pkgdir/usr/lib/systemd/system/$pkgname-deactivate.service"
   install -Dm644 "$pkgdir/usr/share/$pkgname/${pkgname}d.defaults" "$pkgdir/etc/$pkgname/${pkgname}d.conf"
+
+  # remove unused scripts
+  rm -rf "$pkgdir/usr/lib/$pkgname/$pkgname"-{generate,populate}-initrd
 }
