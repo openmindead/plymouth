@@ -8,14 +8,15 @@
 
 pkgname=plymouth
 pkgver=22.02.122
-pkgrel=7
+pkgrel=8
 pkgdesc="A graphical boot splash screen with kernel mode-setting support"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Software/Plymouth/"
 license=('GPL')
 depends=('libdrm' 'pango' 'systemd')
 makedepends=('docbook-xsl' 'git')
-optdepends=('cantarell-fonts: For true type font support'
+optdepends=('ttf-dejavu: Option for true type font support (DejaVuSans)'
+            'texlive-fontsextra: Option for true type font support (Cantarell-Thin)'
             'xf86-video-fbdev: Support special graphic cards on early startup')
 backup=("etc/$pkgname/${pkgname}d.conf")
 _commit=27764b2a2c2e21ad988cae01dc59d4bb78e5c1dc
