@@ -8,7 +8,7 @@
 
 pkgname=plymouth
 pkgver=22.02.122
-pkgrel=6
+pkgrel=7
 pkgdesc="A graphical boot splash screen with kernel mode-setting support"
 arch=('x86_64')
 url="https://www.freedesktop.org/wiki/Software/Plymouth/"
@@ -18,7 +18,6 @@ makedepends=('docbook-xsl' 'git')
 optdepends=('cantarell-fonts: For true type font support'
             'xf86-video-fbdev: Support special graphic cards on early startup')
 backup=("etc/$pkgname/${pkgname}d.conf")
-#options=('!libtool' '!emptydirs')
 _commit=27764b2a2c2e21ad988cae01dc59d4bb78e5c1dc
 source=("git+https://gitlab.freedesktop.org/plymouth/plymouth.git#commit=${_commit}"
         'manjaro-logo.png'
@@ -115,7 +114,4 @@ package() {
 
   install -Dm644 "$srcdir/$pkgname-deactivate.service" "$pkgdir/usr/lib/systemd/system/$pkgname-deactivate.service"
   install -Dm644 "$pkgdir/usr/share/$pkgname/${pkgname}d.defaults" "$pkgdir/etc/$pkgname/${pkgname}d.conf"
-
-  # remove unused scripts
-  rm -rf "$pkgdir/usr/lib/$pkgname/$pkgname"-{generate,populate}-initrd
 }
